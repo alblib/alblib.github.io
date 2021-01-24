@@ -41,18 +41,22 @@ struct Factor{
     return result;
   }
   bool pre3digit_test() const{
+    
+    double test = logvalue();
+    if (test < 3.0) return true;
+    
     int digits = last_3digits();
     int inv_dig = (digits%10) * 100;
     digits/=10;
     inv_dig += (digits%10) * 10 + digits/10;
     double lowest = log10digits[inv_dig] - 1e-6;
     double highest = inv_dig == 999 ? log10digits[100] + 1 + 1e-6 : log10digits[inv_dig+1] + 1e-6;
-    double test = logvalue();
+    
     return (logvalue > lowest && logvalue < highest);
   }
   Factor next() const{
     Factor tmp = *this;
-    ++tmp.index;
+    tmp.index += 2;
   }
 }
 

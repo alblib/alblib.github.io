@@ -52,7 +52,7 @@ struct Factor{
     double lowest = log10digits[inv_dig] - 1e-6;
     double highest = inv_dig == 999 ? log10digits[100] + 1 + 1e-6 : log10digits[inv_dig+1] + 1e-6;
     
-    return (logvalue > lowest && logvalue < highest);
+    return (test > lowest && test < highest);
   }
   Factor next() const{
     Factor tmp = *this;

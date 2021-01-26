@@ -15,6 +15,7 @@ using std::vector;
 using std::cout;
 using std::cin;
 using std::endl;
+using std::string;
 
 // Largest n for P_n to be accomodated: n <= 43, Log2[P_n]<=256;
 
@@ -270,19 +271,34 @@ void optimize_operation(Maximum<Factor>& result, const int n){
 int main(){
     initialize();
     
-    
     cout << "====================================================" << std::endl;
     cout << " Obtain largest palindromic factor of nth primorial" << endl;
     
     int N;
     cout << "  n? > ";
     cin >> N;
+    
+    Maximum<Factor> result;
+    int n = 6;
+    
+    if (N >= 35){
+        cout << " jump known answers? (y/n) > ";
+        string ans;
+        cin >> ans;
+        
+        if (ans == "y" || ans == "Y"){
+            n = 35;
+            result.put(makeFactorWithIndex(0b100110101010000001011001111110));
+            cout << "previous n = " << n-1 << " : " << result.get().value() << std::endl;
+        }
+    }
+    
     cout << "====================================================" << std::endl;
     cout << "0%\t||||||||||||||||||||||||||||||||\t100%" << std::endl;
     cout << "----------------------------------------------------" << std::endl;
     
-    Maximum<Factor> result;
-    for (int n = 6; n <= N; ++n){
+    //Maximum<Factor> result;
+    for (/*int n = 6*/; n <= N; ++n){
         cout << "n = " << n << ":\t";
         cout.flush();
         const clock_t begin_time = clock();

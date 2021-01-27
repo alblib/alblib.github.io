@@ -21,6 +21,7 @@ using namespace boost::multiprecision::literals;
 // Largest n for P_n to be accomodated: n <= 43, Log2[P_n]<=256;
 //current: n=22: 0.52s
 
+#define LOG_EPSILON 1e-12
 
 // MARK: - Progress Bar
 
@@ -205,7 +206,6 @@ void initialize(){
     }
 }
 
-static inline uint32_t log_2(const uint32_t x){if(x == 0) return 0;return (31 - __builtin_clz (x));}
 
 struct Factor{
     using IndexType = uint64_t;
@@ -251,8 +251,8 @@ public:
         auto _3d = value_mod_1000();
         if (_3d % 10 == 0) return false;
         auto _r = reversed(_3d);
-        double lowest = fmod(log10_of_3digits[_r],1) - 1e-6;
-        double highest = fmod(log10_of_3digits[_r+1],1) + 1e-6;
+        double lowest = fmod(log10_of_3digits[_r],1) - LOG_EPSILON;
+        double highest = fmod(log10_of_3digits[_r+1],1) + LOG_EPSILON;
         auto sig = fmod(log10value(), 1);
         return (lowest < sig && sig < highest);
     }
@@ -267,51 +267,34 @@ bool operator == (const Factor& a1, const Factor& a2){
 
 bool operator < (const Factor& a1, const Factor& a2){
     double delta = a1.log10value() - a2.log10value();
-    if (delta < -1e-14) return true;
-    if (delta > 1e-14) return false;
+    if (delta < -LOG_EPSILON) return true;
+    if (delta > LOG_EPSILON) return false;
     return a1.value() < a2.value();
 }
 bool operator > (const Factor& a1, const Factor& a2){
     return a2 < a1;
 }
 
-template <typename T, class Compare = std::less<T>>
-class Maximum{
-public:
-    using element_type = T;
-private:
-    std::atomic<T> value;
-    Compare _com;
-public:
-    Maximum(): value(T()), _com(Compare()){}
-    Maximum(T _default): value(_default), _com(Compare()){}
-    Maximum(T _default, Compare comparison): value(_default), _com(comparison){}
-    T get () const{
-        return value.load();
-    }
-    void put(const T& compare){
-        T tmp = get();
-        while (_com(tmp, compare) && !value.compare_exchange_weak(tmp, compare)){}
-    }
-};
-
-void thread_cell(Maximum<Factor>& result, const int n, const int division_bit_depth, uint64_t threadIndex, ProgressBar& completedThread){
-    
+void thread_cell(std::atomic<Factor>& result, const int n, const int division_bit_depth, uint64_t threadIndex, ProgressBar& completedThread){
     const uint64_t startIndex = ((uint64_t(1) << division_bit_depth) | threadIndex) << (n - 1 - division_bit_depth);
     const uint64_t endIndex = ((uint64_t(1) << division_bit_depth) + 1 + threadIndex) << (n - 1 - division_bit_depth);
+    Factor temp_max = result.load();
+    double temp_max_log = temp_max.log10value() - LOG_EPSILON;
     for ( uint64_t i = startIndex; i < endIndex; ++i){
-        auto temp = makeFactorWithIndex(i);
-        if (temp.log10value() < result.get().log10value() - 1e-14) continue;
-        if (!temp.pre_palindromic_test()) continue;
-        auto val = temp.value();
+        auto currentFactor = makeFactorWithIndex(i);
+        if (currentFactor.log10value() < temp_max_log) continue;
+        if (!currentFactor.pre_palindromic_test()) continue;
+        auto val = currentFactor.value();
         if (is_palindromic(val)){
-            result.put(temp);
+            while(currentFactor > temp_max && !result.compare_exchange_weak(temp_max, currentFactor)){
+                temp_max_log = temp_max.log10value() - LOG_EPSILON;
+            }
         }
     }
     completedThread.addOne();
 }
 
-void operation(Maximum<Factor>& result, const int n, const int division_bit_depth){
+void operation(std::atomic<Factor>& result, const int n, const int division_bit_depth){
     std::atomic<uint64_t> completedThread;
     auto cnt = uint64_t(1) << division_bit_depth;
     ProgressBar progress(cnt);
@@ -323,7 +306,7 @@ void operation(Maximum<Factor>& result, const int n, const int division_bit_dept
         ths[i].join();
 }
 
-void optimize_operation(Maximum<Factor>& result, const int n){
+void optimize_operation(std::atomic<Factor>& result, const int n){
     /*
     const int maxThreadDepth = std::min( n / 2,
         std::maxlround(log2(double(std::thread::hardware_concurrency())) * 2)
@@ -345,7 +328,7 @@ int main(){
     cout << "  n? > ";
     cin >> N;
     
-    Maximum<Factor> result;
+    std::atomic<Factor> result = Factor();
     int n = 6;
     
     if (N >= 35){
@@ -355,8 +338,8 @@ int main(){
         
         if (ans == "y" || ans == "Y"){
             n = 35;
-            result.put(makeFactorWithIndex(0b100110101010000001011001111110));
-            cout << "previous n = " << n-1 << " : " << result.get().value() << std::endl;
+            result.store(makeFactorWithIndex(0b100110101010000001011001111110));
+            cout << "previous n = " << n-1 << " : " << result.load().value() << std::endl;
         }
     }
     
@@ -372,7 +355,7 @@ int main(){
         
         optimize_operation(result, n);
         //cout << " ["<< float( clock () - begin_time ) /  CLOCKS_PER_SEC << "] ";
-        cout << "  " << result.get().value() << " [" << secondToString(float( clock () - begin_time ) /  CLOCKS_PER_SEC ) << "]" << std::endl;
+        cout << "  " << result.load().value() << " [" << secondToString(float( clock () - begin_time ) /  CLOCKS_PER_SEC ) << "]" << std::endl;
         
     }
     cout << "====================================================" << std::endl;

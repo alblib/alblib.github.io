@@ -9,6 +9,7 @@
 #include <functional>
 #include <sstream>
 #include <string>
+#include <utility>
 
 using boost::multiprecision::uint256_t;
 using std::vector;
@@ -16,9 +17,13 @@ using std::cout;
 using std::cin;
 using std::endl;
 using std::string;
+using namespace boost::multiprecision::literals;
 
 // Largest n for P_n to be accomodated: n <= 43, Log2[P_n]<=256;
+//current: n=22: 0.52s
 
+
+// MARK: - Progress Bar
 
 std::string secondToString(double seconds){
     std::stringstream ss;
@@ -81,7 +86,7 @@ public:
     }
 };
 
-// MARK: Basic functions:
+// MARK: - Basic functions:
 template <class Integral>
 Integral reversed(Integral original)
 {
@@ -110,23 +115,81 @@ std::vector<Integral> list_of_primes(Integral number){
     return result;
 }
 
+
+template <class U, class T>
+std::vector<U> vector_cast(const std::vector<T> x){
+    std::vector<U> result(x.size());
+    auto it1 = x.cbegin();
+    auto it2 = result.begin();
+    while (it1 != x.cend()){
+        *it2 = static_cast<U>(*it1);
+        ++it1; ++it2;
+    }
+    return result;
+}
+
+template <class T, class UnaryOperation>
+auto apply_vector(UnaryOperation unary_op, const std::vector<T>& operand){
+    std::vector<decltype(unary_op(std::declval<T>()))> result(operand.size());
+    std::transform(operand.begin(), operand.end(), result.begin(), unary_op);
+    return result;
+}
+
+auto log10int = [](const int& x){return std::log10(double(x));};
+
+template <class T, class BinaryOperation, class InputIt, class OutputIt>
+OutputIt fibonacci(InputIt begin, InputIt end, OutputIt output, BinaryOperation operation, T beginning){
+    InputIt it = begin;
+    while (it != end){
+        *output = beginning = operation(beginning, *it);
+        ++it;
+        ++output;
+    }
+    return output;
+}
+
+template <class T, class BinaryOperation>
+vector<T> fibonacci_vector(const vector<T>& inputs, BinaryOperation operation, T beginning){
+    vector<T> result(inputs.size());
+    fibonacci(inputs.begin(), inputs.end(), result.begin(), operation, beginning);
+    return result;
+}
+
 // MARK: - Initializes tables
 
+using represent_type = boost::multiprecision::checked_uint512_t;
+using mask_type = uint64_t;
+using ordinal_type = size_t;
+
 auto primes = list_of_primes(43);
-vector<uint256_t> primorials;
-vector<double> log10_of_primes;
+vector<represent_type> primorials = fibonacci_vector<represent_type>(vector_cast<represent_type>(primes), std::multiplies(), 1);
+vector<double> log10_of_primes = apply_vector(log10int, primes);
+double log10_of_factor22[4194304]; // log10 of factors of primorial_22. 32MB memory.
+double log10_of_nextfactor21[2097152]; // 16MB
 
 double log10_of_3digits[1001];
 int multiplication_mod_3digits[1000][1000];
 
 void initialize(){
-    // primorials
-    uint256_t prim = 1;
-    for (const auto& a: primes)
-        primorials.push_back(prim *= a);
-    // log10 of primes
-    for (const auto& p: primes)
-        log10_of_primes.push_back(std::log10(static_cast<double>(p)));
+    //log10_of_factor22
+    for (mask_type i = 0; i < 4194304; ++i){
+        double result = 0;
+        mask_type _index = i;
+        for (size_t j = 0; j < 22 && _index; ++j){
+            result += (_index & 1) ? log10_of_primes[j] : 0;
+            _index >>= 1;
+        }
+        log10_of_factor22[i] = result;
+    }
+    for (mask_type i = 0; i < 2097152; ++i){
+        double result = 0;
+        mask_type _index = i;
+        for (size_t j = 0; j < 21 && _index; ++j){
+            result += (_index & 1) ? log10_of_primes[j+22] : 0;
+            _index >>= 1;
+        }
+        log10_of_nextfactor21[i] = result;
+    }
     // log10 signatures
     for (size_t i = 0; i <= 1000; ++i)
         log10_of_3digits[i] = std::log10(static_cast<double>(i));
@@ -138,12 +201,20 @@ void initialize(){
     }
 }
 
+static inline uint32_t log_2(const uint32_t x){if(x == 0) return 0;return (31 - __builtin_clz (x));}
+
 struct Factor{
     using IndexType = uint64_t;
     IndexType index;
     Factor(): index(0){}
 private:
     Factor(uint64_t f): index(f){}
+    
+    //static auto log10_of_primes = apply_vector(log10int, list_of_primes(64));
+    static std::array<double, 1uLL << 24> log10_of_1st_factors24;
+    //static std::array<double, 1uLL << 23> log10_of_2nd_factors23;
+    //static std::array<double, 1uLL << 18> log10_of_3rd_factors18;
+    
 public:
     friend Factor makeFactorWithIndex(uint64_t i);
     Factor next() const{
@@ -151,6 +222,7 @@ public:
         ++(tmp.index);
         return tmp;
     }
+    /*
     double log10value() const{
         double result = 0;
         uint64_t _index = index;
@@ -159,9 +231,15 @@ public:
             _index >>= 1;
         }
         return result;
+    }*/
+    
+    double log10value() const{
+        uint64_t _index = index;
+        return log10_of_factor22[_index & 0x3fffffuLL] + log10_of_nextfactor21[_index >> 22];
     }
-    uint256_t value() const{
-        uint256_t result = 1;
+     
+    represent_type value() const{
+        represent_type result = 1;
         uint64_t _index = index;
         for (size_t i = 0; i < primes.size() && _index; ++i){
             result *= (_index & 1) ? primes[i] : 1;
@@ -189,6 +267,17 @@ public:
         return (lowest < sig && sig < highest);
     }
 };
+
+ std::array<double, 1uLL << 24> Factor::log10_of_1st_factors24 = [](){
+    std::array<double, 1uLL << 24> result;
+    result[0] = 0;
+    for (size_t i = 1; i < 1uLL<<24; ++i){
+        size_t maxdigit_1 = sizeof(size_t)*8 - __builtin_clz(i) - 1;
+        result[i] = result[i ^ (1<<(maxdigit_1))] + log10_of_primes[maxdigit_1];
+    }
+     cout<<"done";
+    return result;
+}();
 
 Factor makeFactorWithIndex(uint64_t i){
     return Factor(i);

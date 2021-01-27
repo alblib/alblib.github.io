@@ -11,7 +11,6 @@
 #include <string>
 #include <utility>
 
-using boost::multiprecision::uint256_t;
 using std::vector;
 using std::cout;
 using std::cin;
@@ -161,35 +160,40 @@ using represent_type = boost::multiprecision::checked_uint512_t;
 using mask_type = uint64_t;
 using ordinal_type = size_t;
 
-auto primes = list_of_primes(43);
+auto primes = list_of_primes(64);
 vector<represent_type> primorials = fibonacci_vector<represent_type>(vector_cast<represent_type>(primes), std::multiplies(), 1);
 vector<double> log10_of_primes = apply_vector(log10int, primes);
-double log10_of_factor22[4194304]; // log10 of factors of primorial_22. 32MB memory.
-double log10_of_nextfactor21[2097152]; // 16MB
+std::array<double, (1<<16) > log10_of_factor16; // 16: 512KB------log10 of factors of primorial_22. 32MB memory.
+std::array<double, (1<<16) > log10_of_factor16_2;
+std::array<double, (1<<16) > log10_of_factor16_3;
+std::array<double, (1<<16) > log10_of_factor16_4;
 
 double log10_of_3digits[1001];
 int multiplication_mod_3digits[1000][1000];
 
 void initialize(){
     //log10_of_factor22
-    for (mask_type i = 0; i < 4194304; ++i){
-        double result = 0;
-        mask_type _index = i;
-        for (size_t j = 0; j < 22 && _index; ++j){
-            result += (_index & 1) ? log10_of_primes[j] : 0;
-            _index >>= 1;
-        }
-        log10_of_factor22[i] = result;
+    log10_of_factor16[0] = 0;
+    for (uint32_t i = 1; i < 1<<16; ++i){
+        size_t maxdigit_1 = sizeof(uint32_t)*8 - __builtin_clz(i) - 1;
+        log10_of_factor16[i] = log10_of_factor16[i ^ (1<<(maxdigit_1))] + log10_of_primes[maxdigit_1];
     }
-    for (mask_type i = 0; i < 2097152; ++i){
-        double result = 0;
-        mask_type _index = i;
-        for (size_t j = 0; j < 21 && _index; ++j){
-            result += (_index & 1) ? log10_of_primes[j+22] : 0;
-            _index >>= 1;
-        }
-        log10_of_nextfactor21[i] = result;
+    log10_of_factor16_2[0] = 0;
+    for (uint32_t i = 1; i < 1<<16; ++i){
+        size_t maxdigit_1 = sizeof(uint32_t)*8 - __builtin_clz(i) - 1;
+        log10_of_factor16_2[i] = log10_of_factor16_2[i ^ (1<<(maxdigit_1))] + log10_of_primes[maxdigit_1+16];
     }
+    log10_of_factor16_3[0] = 0;
+    for (uint32_t i = 1; i < 1<<16; ++i){
+        size_t maxdigit_1 = sizeof(uint32_t)*8 - __builtin_clz(i) - 1;
+        log10_of_factor16_3[i] = log10_of_factor16_3[i ^ (1<<(maxdigit_1))] + log10_of_primes[maxdigit_1+32];
+    }
+    log10_of_factor16_4[0] = 0;
+    for (uint32_t i = 1; i < 1<<16; ++i){
+        size_t maxdigit_1 = sizeof(uint32_t)*8 - __builtin_clz(i) - 1;
+        log10_of_factor16_4[i] = log10_of_factor16_4[i ^ (1<<(maxdigit_1))] + log10_of_primes[maxdigit_1+48];
+    }
+    
     // log10 signatures
     for (size_t i = 0; i <= 1000; ++i)
         log10_of_3digits[i] = std::log10(static_cast<double>(i));
@@ -210,11 +214,6 @@ struct Factor{
 private:
     Factor(uint64_t f): index(f){}
     
-    //static auto log10_of_primes = apply_vector(log10int, list_of_primes(64));
-    static std::array<double, 1uLL << 24> log10_of_1st_factors24;
-    //static std::array<double, 1uLL << 23> log10_of_2nd_factors23;
-    //static std::array<double, 1uLL << 18> log10_of_3rd_factors18;
-    
 public:
     friend Factor makeFactorWithIndex(uint64_t i);
     Factor next() const{
@@ -222,20 +221,11 @@ public:
         ++(tmp.index);
         return tmp;
     }
-    /*
-    double log10value() const{
-        double result = 0;
-        uint64_t _index = index;
-        for (size_t i = 0; i < primes.size() && _index; ++i){
-            result += (_index & 1) ? log10_of_primes[i] : 0;
-            _index >>= 1;
-        }
-        return result;
-    }*/
     
     double log10value() const{
         uint64_t _index = index;
-        return log10_of_factor22[_index & 0x3fffffuLL] + log10_of_nextfactor21[_index >> 22];
+        return log10_of_factor16[_index & 0xffffuLL] + log10_of_factor16_2[_index >> 16 & 0xffffuLL]
+        + log10_of_factor16_3[_index >> 32 & 0xffffuLL] + log10_of_factor16_4[_index >> 48] ;
     }
      
     represent_type value() const{
@@ -267,18 +257,6 @@ public:
         return (lowest < sig && sig < highest);
     }
 };
-
- std::array<double, 1uLL << 24> Factor::log10_of_1st_factors24 = [](){
-    std::array<double, 1uLL << 24> result;
-    result[0] = 0;
-    for (size_t i = 1; i < 1uLL<<24; ++i){
-        size_t maxdigit_1 = sizeof(size_t)*8 - __builtin_clz(i) - 1;
-        result[i] = result[i ^ (1<<(maxdigit_1))] + log10_of_primes[maxdigit_1];
-    }
-     cout<<"done";
-    return result;
-}();
-
 Factor makeFactorWithIndex(uint64_t i){
     return Factor(i);
 }
@@ -289,8 +267,8 @@ bool operator == (const Factor& a1, const Factor& a2){
 
 bool operator < (const Factor& a1, const Factor& a2){
     double delta = a1.log10value() - a2.log10value();
-    if (delta < -1e-6) return true;
-    if (delta > 1e-6) return false;
+    if (delta < -1e-14) return true;
+    if (delta > 1e-14) return false;
     return a1.value() < a2.value();
 }
 bool operator > (const Factor& a1, const Factor& a2){
@@ -323,7 +301,7 @@ void thread_cell(Maximum<Factor>& result, const int n, const int division_bit_de
     const uint64_t endIndex = ((uint64_t(1) << division_bit_depth) + 1 + threadIndex) << (n - 1 - division_bit_depth);
     for ( uint64_t i = startIndex; i < endIndex; ++i){
         auto temp = makeFactorWithIndex(i);
-        if (temp.log10value() < result.get().log10value() - 1e-6) continue;
+        if (temp.log10value() < result.get().log10value() - 1e-14) continue;
         if (!temp.pre_palindromic_test()) continue;
         auto val = temp.value();
         if (is_palindromic(val)){
@@ -350,7 +328,7 @@ void optimize_operation(Maximum<Factor>& result, const int n){
     const int maxThreadDepth = std::min( n / 2,
         std::maxlround(log2(double(std::thread::hardware_concurrency())) * 2)
     );*/
-    const int threadDepth = std::min(std::max((n-20)/3, 0), n/2);
+    const int threadDepth = std::min(std::max((n-23)/3, 0), n/2);
     operation(result, n, threadDepth);
 }
 

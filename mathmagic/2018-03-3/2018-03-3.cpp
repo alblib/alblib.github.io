@@ -10,6 +10,7 @@
 #include <sstream>
 #include <string>
 #include <utility>
+#include <stdexcept>
 
 using std::vector;
 using std::cout;
@@ -19,7 +20,7 @@ using std::string;
 using namespace boost::multiprecision::literals;
 
 // Largest n for P_n to be accomodated: n <= 43, Log2[P_n]<=256;
-//current: n=22: 0.52s
+//current: n=22: 0.52s ->0.26s
 
 #define LOG_EPSILON 1e-12
 
@@ -221,6 +222,25 @@ public:
         ++(tmp.index);
         return tmp;
     }
+    Factor previous() const{
+        return Factor(index-1);
+    }
+    Factor& transform_previous(){
+        --index;
+        return *this;
+    }
+    Factor prev_skipping_smaller() const{
+        auto tmp = (index + 1);
+        if (tmp == 0) return Factor(0);
+        tmp ^= (1 << __builtin_ctzll(tmp));
+        return Factor(tmp);
+    }
+    Factor& transform_prev_skipping_smaller(size_t with_depth_stopping){
+        if (!(index & 1uLL)) return transform_previous();
+        if (++index == 0) return *this;
+        index ^= (1 << std::min(static_cast<size_t>(__builtin_ctzll(index)), with_depth_stopping));
+        return *this;
+    }
     
     double log10value() const{
         uint64_t _index = index;
@@ -276,19 +296,27 @@ bool operator > (const Factor& a1, const Factor& a2){
 }
 
 void thread_cell(std::atomic<Factor>& result, const int n, const int division_bit_depth, uint64_t threadIndex, ProgressBar& completedThread){
-    const uint64_t startIndex = ((uint64_t(1) << division_bit_depth) | threadIndex) << (n - 1 - division_bit_depth);
-    const uint64_t endIndex = ((uint64_t(1) << division_bit_depth) + 1 + threadIndex) << (n - 1 - division_bit_depth);
+    const int spanDepth = n - 1 - division_bit_depth;
+    const uint64_t startIndex = ((uint64_t(1) << division_bit_depth) | threadIndex) << spanDepth;
+    const uint64_t endIndex = ((uint64_t(1) << division_bit_depth) + 1 + threadIndex) << spanDepth;
     Factor temp_max = result.load();
     double temp_max_log = temp_max.log10value() - LOG_EPSILON;
-    for ( uint64_t i = startIndex; i < endIndex; ++i){
-        auto currentFactor = makeFactorWithIndex(i);
-        if (currentFactor.log10value() < temp_max_log) continue;
-        if (!currentFactor.pre_palindromic_test()) continue;
-        auto val = currentFactor.value();
-        if (is_palindromic(val)){
-            while(currentFactor > temp_max && !result.compare_exchange_weak(temp_max, currentFactor)){
+    
+    if (n < 5) throw std::runtime_error("too small n.");
+    if (spanDepth < 0) throw std::runtime_error("too many thread division.");
+    Factor f = makeFactorWithIndex(endIndex-1);
+    while (f.index >= startIndex){
+        if (((f.index & 4) >> 2) & f.index){ // multiple of 10
+            f.transform_previous();
+        } else if (f.log10value() < temp_max_log){
+            f.transform_prev_skipping_smaller(spanDepth);
+        }else if (f.pre_palindromic_test() && is_palindromic(f.value())){
+            while(f > temp_max && !result.compare_exchange_weak(temp_max, f)){
                 temp_max_log = temp_max.log10value() - LOG_EPSILON;
             }
+            f.transform_prev_skipping_smaller(spanDepth);
+        }else{
+            f.transform_previous();
         }
     }
     completedThread.addOne();
@@ -311,7 +339,7 @@ void optimize_operation(std::atomic<Factor>& result, const int n){
     const int maxThreadDepth = std::min( n / 2,
         std::maxlround(log2(double(std::thread::hardware_concurrency())) * 2)
     );*/
-    const int threadDepth = std::min(std::max((n-23)/3, 0), n/2);
+    const int threadDepth = std::min(std::min(std::max((n-23)/3, 0), n/2), int(std::ceil(std::log2(double(std::thread::hardware_concurrency() * 2 - 1)))));
     operation(result, n, threadDepth);
 }
 

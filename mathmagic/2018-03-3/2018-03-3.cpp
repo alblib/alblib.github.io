@@ -359,13 +359,13 @@ int main(){
     std::atomic<Factor> result = Factor();
     int n = 6;
     
-    if (N >= 35){
+    if (N >= 37){
         cout << " jump known answers? (y/n) > ";
         string ans;
         cin >> ans;
         
         if (ans == "y" || ans == "Y"){
-            n = 35;
+            n = 37;
             result.store(makeFactorWithIndex(0b100110101010000001011001111110));
             cout << "previous n = " << n-1 << " : " << result.load().value() << std::endl;
         }

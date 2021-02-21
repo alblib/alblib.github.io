@@ -16,6 +16,7 @@ Too many threads gives error. We may create number of threads order of physical 
 
 ***Results***
 max palindromic factor of *n*th primorial with base *b*
+
 |*n*|base=2|3|4|5|6|7|8|9|10|
 |---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 |**1**|1|2|2|2|2|2|2|2|2|

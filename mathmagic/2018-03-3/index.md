@@ -10,7 +10,7 @@ There may be two approaches to reduce computation. (1) To reduce testing complex
 First, we are pursuing the largest factor for each *n*, we can ignore values smaller than the answer for *n*-1. We may use logarithms to compare because addition is much faster than multiplication. Secondly, it would be helpful to test palindromicity rapidly by comparing first digit and last digit and so forth. The fastest way to do this may be to use logarithm. We can prepare the set of the logs of all the prime numbers with maximum precision. Simply adding those logs gives the brief values. Also, if the precision is not enough, we can obtain the last digit by multiplication under modulus 10. Multiplication table modulus 10 also should be prepared in advance to reduce calculation time. If you want to test up to 2 digits, table should be modulus 100.
 
 ***Code***
-C++ code is [here](2018-03-3.cpp). Multi-threaded. Much faster on multi-core cpu.
+C++ code is [here](https://github.com/alblib/alblib.github.io/tree/main/mathmagic/2018-03-3). Multi-threaded. Much faster on multi-core cpu.
 
 Too many threads gives error. We may create number of threads order of physical cores.
 

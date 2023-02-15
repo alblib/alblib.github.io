@@ -24,10 +24,15 @@
 
 ![module](./images/square-stack-3d-up-fill.svg)
 
-<img src="./images/square-stack-3d-up-fill.svg" width="20" height=""> `SignalProcessing`
+<img src="./images/square-stack-3d-up-fill.svg" width="12" height="12"> `SignalProcessing`
 
 ![](https://raw.githubusercontent.com/andrewtavis/sf-symbols-online/master/glyphs/square-stack-3d-up-fill.png#gh-light-mode-only)
 ![](https://raw.githubusercontent.com/andrewtavis/sf-symbols-online/master/glyphs_white/square-stack-3d-up-fill.png#gh-dark-mode-only)
+
+<img src="./images/square-stack-3d-up-fill.svg" width="15" height="15"> fdfds
+
+<table><tr><td valign="center"><img src="./images/square-stack-3d-up-fill.svg" width="20" height=""> `text` </td></tr></table>
+
 
 <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>
 *dfd*</sub>

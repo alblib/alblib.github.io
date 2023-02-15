@@ -23,7 +23,8 @@
 `􀐟 PlotInterpolations`
 
 ![module](./images/square-stack-3d-up-fill.svg)
-<img src="./images/square-stack-3d-up-fill.svg">
+
+<img src="./images/square-stack-3d-up-fill.svg" width="20" height=""> `SignalProcessing`
 
 ![](https://raw.githubusercontent.com/andrewtavis/sf-symbols-online/master/glyphs/square-stack-3d-up-fill.png#gh-light-mode-only)
 ![](https://raw.githubusercontent.com/andrewtavis/sf-symbols-online/master/glyphs_white/square-stack-3d-up-fill.png#gh-dark-mode-only)

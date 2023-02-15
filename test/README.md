@@ -10,6 +10,7 @@
 ## Submodules
 
 depends on 
+![Swift-DocC](https://img.shields.io/badge/-Apple%20Platform%20Only-gray?logo=data/image;https://raw.githubusercontent.com/andrewtavis/sf-symbols-online/master/glyphs/square.stack.3d.up.fill.png&style=flat&logoColor=white)
 
 <img src="./images/square-stack-3d-up-fill.svg" width="12" height="12"> `BigNumbers`
 <br/>&nbsp;&nbsp;&nbsp;&nbsp;<sub>

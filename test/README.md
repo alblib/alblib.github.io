@@ -9,30 +9,28 @@
 
 ## Submodules
 
-* BigNumbers
-* LinearAlgebra
-* `module ComplexLinearAlgebra`<br/><sub>*fdsafdfdsafdsfdsfdsfdfdsafsasafdsa*</sub>
-* Polynomials
-* SignalProcessing
+depends on 
 
-`􀐟 SignalProcessing`
-<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>
-*dfd*</sub>
+<img src="./images/square-stack-3d-up-fill.svg" width="12" height="12"> `BigNumbers`
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<sub>
+*Big Numerals using Accelerate*</sub>
 
+<img src="./images/square-stack-3d-up-fill.svg" width="12" height="12"> `LinearAlgebra`
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<sub>
+*Real Vectors and matrices*</sub>
 
-`􀐟 PlotInterpolations`
+<img src="./images/square-stack-3d-up-fill.svg" width="12" height="12"> `ComplexLinearAlgebra`
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<sub>
+*Complex Vectors and matrices*</sub>
 
-![module](./images/square-stack-3d-up-fill.svg)
+<img src="./images/square-stack-3d-up-fill.svg" width="12" height="12"> `Polynomials`
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<sub>
+*Univariate and multivariate polynomials using Accelerate*</sub>
 
 <img src="./images/square-stack-3d-up-fill.svg" width="12" height="12"> `SignalProcessing`
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<sub>
+*Fourier*</sub>
 
-![](https://raw.githubusercontent.com/andrewtavis/sf-symbols-online/master/glyphs/square-stack-3d-up-fill.png#gh-light-mode-only)
-![](https://raw.githubusercontent.com/andrewtavis/sf-symbols-online/master/glyphs_white/square-stack-3d-up-fill.png#gh-dark-mode-only)
-
-<img src="./images/square-stack-3d-up-fill.svg" width="15" height="15"> fdfds
-
-<table><tr><td valign="center"><img src="./images/square-stack-3d-up-fill.svg" width="20" height=""> `text` </td></tr></table>
-
-
-<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>
-*dfd*</sub>
+<img src="./images/square-stack-3d-up-fill.svg" width="12" height="12"> `PlotInterpolations`
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<sub>
+*Hermite cubic spline*</sub>

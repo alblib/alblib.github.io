@@ -9,29 +9,33 @@
 
 ## Submodules
 
-depends on 
-![Swift-DocC](https://img.shields.io/badge/-Apple%20Platform%20Only-gray?logo=data/image;https://raw.githubusercontent.com/andrewtavis/sf-symbols-online/master/glyphs/square.stack.3d.up.fill.png&style=flat&logoColor=white)
+depends on
+[![Accelerate](https://img.shields.io/badge/-Accelerate-gray?logoColor=white&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACoAAAApCAYAAABDV7v1AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAKqADAAQAAAABAAAAKQAAAACTut/bAAADpUlEQVRYCe2XO0hWYRjH/bwlatmggy2JIjkUEkQO2iS6KY1WUESNQQ1BuVQ0VDQE0RIJgTZXtHShIsSGitqihrAGo4sNkkllF+33j/MeX1/Pe77vfDcdfODn97zP3XN7zykpWZUVegTm5+eb4ApMwhcYgqYVMy7DVMNp+AGuyCZf9bIOzAADMAHpRDEDRR+WplthLN10EX7lbC34wDRpAF2HfyFbUa5qNOR9YIqWwxGYgnyJaqlmeV4GplAvvIJCiWr3Zj0syS1wq1DTRdRVr5aMBya4DE7BTyi2qKd6l6UdmCA9qJdbhtxBU66BCb9iW+fai7yeTqVSdXbPUnsR6A8jbMU2pZ+BI1oDV5fx3Kt35lsuwZ3woogDq1dnVqeOxFI4CHojKpSotnpEXYbJ5qZIHVyAX5AvUS3VXHTTJJvME03RNrgLuYpqtHnaZGamwB44BN6HLr4+eANJRTl9vknwabNR792+mNBOkHnxeIneHTocBV8lHINvkE4Uo9hKp0y4xNcN6imZCh0+haD7/0MX/txEbY6Jb8Q/DHMLKaEmm3yNMfnN+NXDlge++NBOtD4tzsKslak9+AzUhoGOgq8DdO1pOHEPOpywcImvFtRHtY3oBjsPNWFgOoXgVrgDtnxgsReWbL2mHj79o94HtnJBNVTLFv1jm0ydxL8k98NbuyL6E/AeLV8T5QS5/ITyDm2nLyeRnUJVcAK+g5E5lNjrzzQhLuo6Vq2TUGXiEv2SGHdaN+K/Drbojh6ENW4j2QKf+2S4gb3JjTdrfN4ZTEwJQSMwCu2h0VHw9cBrsGWcRXgKpYNstiinxykXLvG1g3qPhEafQtAMSPS1eBnqo2KxV8BRmAZbHrMYsw3oilFshadWPT71Uk/JTFTcIhtBx8EkKEkbwGGI/FrEruvvGvhEvsjnKHZ93aq2ehjRtT+4aCjfgsBtoDvbltivRQK74LmVIL0rpkcvftW05RmL7b6cSDsJet7th89gi/drkSDl7AiIvCHwtYD7dTuJ7QBE5kQO6BpJroOL8BuMzKKcg7VuvG+t2CBHuUb+oFyC9b68xHaKbYZHYIt2l33gPRLyBTHuTjSKfUviQTJNoPgATIAtT1ks2alkA/lsec9iV6b9coqjkT4A3RcXs1NtwCeGQTYj5nLxvtjkNFRcMhPoxeW2mST41RuQsEUxrXG1iuJjCL24jNuTBbps/UUZItMmDKQXF20WH+FToGf3wpFp09W4HI7APy0RUhxi17rGAAAAAElFTkSuQmCC&style=flat)](https://developer.apple.com/documentation/accelerate)
+[![swift-numerics](https://img.shields.io/badge/-swift--numerics-gray?logoColor=white&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACoAAAApCAYAAABDV7v1AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAKqADAAQAAAABAAAAKQAAAACTut/bAAADpUlEQVRYCe2XO0hWYRjH/bwlatmggy2JIjkUEkQO2iS6KY1WUESNQQ1BuVQ0VDQE0RIJgTZXtHShIsSGitqihrAGo4sNkkllF+33j/MeX1/Pe77vfDcdfODn97zP3XN7zykpWZUVegTm5+eb4ApMwhcYgqYVMy7DVMNp+AGuyCZf9bIOzAADMAHpRDEDRR+WplthLN10EX7lbC34wDRpAF2HfyFbUa5qNOR9YIqWwxGYgnyJaqlmeV4GplAvvIJCiWr3Zj0syS1wq1DTRdRVr5aMBya4DE7BTyi2qKd6l6UdmCA9qJdbhtxBU66BCb9iW+fai7yeTqVSdXbPUnsR6A8jbMU2pZ+BI1oDV5fx3Kt35lsuwZ3woogDq1dnVqeOxFI4CHojKpSotnpEXYbJ5qZIHVyAX5AvUS3VXHTTJJvME03RNrgLuYpqtHnaZGamwB44BN6HLr4+eANJRTl9vknwabNR792+mNBOkHnxeIneHTocBV8lHINvkE4Uo9hKp0y4xNcN6imZCh0+haD7/0MX/txEbY6Jb8Q/DHMLKaEmm3yNMfnN+NXDlge++NBOtD4tzsKslak9+AzUhoGOgq8DdO1pOHEPOpywcImvFtRHtY3oBjsPNWFgOoXgVrgDtnxgsReWbL2mHj79o94HtnJBNVTLFv1jm0ydxL8k98NbuyL6E/AeLV8T5QS5/ITyDm2nLyeRnUJVcAK+g5E5lNjrzzQhLuo6Vq2TUGXiEv2SGHdaN+K/Drbojh6ENW4j2QKf+2S4gb3JjTdrfN4ZTEwJQSMwCu2h0VHw9cBrsGWcRXgKpYNstiinxykXLvG1g3qPhEafQtAMSPS1eBnqo2KxV8BRmAZbHrMYsw3oilFshadWPT71Uk/JTFTcIhtBx8EkKEkbwGGI/FrEruvvGvhEvsjnKHZ93aq2ehjRtT+4aCjfgsBtoDvbltivRQK74LmVIL0rpkcvftW05RmL7b6cSDsJet7th89gi/drkSDl7AiIvCHwtYD7dTuJ7QBE5kQO6BpJroOL8BuMzKKcg7VuvG+t2CBHuUb+oFyC9b68xHaKbYZHYIt2l33gPRLyBTHuTjSKfUviQTJNoPgATIAtT1ks2alkA/lsec9iV6b9coqjkT4A3RcXs1NtwCeGQTYj5nLxvtjkNFRcMhPoxeW2mST41RuQsEUxrXG1iuJjCL24jNuTBbps/UUZItMmDKQXF20WH+FToGf3wpFp09W4HI7APy0RUhxi17rGAAAAAElFTkSuQmCC&style=flat)](https://github.com/apple/swift-numerics)
+
 
 <img src="./images/square-stack-3d-up-fill.svg" width="12" height="12"> `BigNumbers`
 <br/>&nbsp;&nbsp;&nbsp;&nbsp;<sub>
-*Big Numerals using Accelerate*</sub>
+*Big numerals with their operations using __Accelerate__*</sub>
 
 <img src="./images/square-stack-3d-up-fill.svg" width="12" height="12"> `LinearAlgebra`
 <br/>&nbsp;&nbsp;&nbsp;&nbsp;<sub>
-*Real Vectors and matrices*</sub>
+*Real vectors and matrices with their operations using __Accelerate__*</sub>
 
 <img src="./images/square-stack-3d-up-fill.svg" width="12" height="12"> `ComplexLinearAlgebra`
 <br/>&nbsp;&nbsp;&nbsp;&nbsp;<sub>
-*Complex Vectors and matrices*</sub>
+*Complex vectors and matrices with their operations using __Accelerate__*</sub>
 
 <img src="./images/square-stack-3d-up-fill.svg" width="12" height="12"> `Polynomials`
 <br/>&nbsp;&nbsp;&nbsp;&nbsp;<sub>
-*Univariate and multivariate polynomials using Accelerate*</sub>
+*Univariate and multivariate polynomials with their operations using __Accelerate__*</sub>
 
 <img src="./images/square-stack-3d-up-fill.svg" width="12" height="12"> `SignalProcessing`
 <br/>&nbsp;&nbsp;&nbsp;&nbsp;<sub>
-*Fourier*</sub>
+*Digital signal processing using FIR and IIR Filters represented by digital transfer function, with bilinear transform and discrete Fourier transform.*</sub>
 
 <img src="./images/square-stack-3d-up-fill.svg" width="12" height="12"> `PlotInterpolations`
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;<sub>
+*Digital signal processing using FIR and IIR Filters represented by digital transfer function, with bilinear transform and discrete Fourier transform.*</sub>
 <br/>&nbsp;&nbsp;&nbsp;&nbsp;<sub>
 *Hermite cubic spline*</sub>

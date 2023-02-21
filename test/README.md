@@ -36,4 +36,4 @@ depends on
 
 <img src="./images/square-stack-3d-up-fill.svg" width="12" height="12"> `PlotInterpolations`
 <br/>&nbsp;&nbsp;&nbsp;&nbsp;<sub>
-*Support various interpolation methods between plot points using Hermite cubic splines.</sub>
+*Support various interpolation methods between plot points using Hermite cubic splines.*</sub>

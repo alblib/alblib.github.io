@@ -32,10 +32,10 @@ depends on
 
 <img src="./images/square-stack-3d-up-fill.svg" width="12" height="12"> `SignalProcessing`
 <br/>&nbsp;&nbsp;&nbsp;&nbsp;<sub>
-*Digital signal processing using FIR and IIR Filters represented by digital transfer function, with bilinear transform and discrete Fourier transform.*</sub>
+*Digital signal processing using FIR and IIR Filters represented by digital transfer function, with bilinear transform and discrete Fourier transform, defined in __Accelerate.vDSP__*</sub>
 
 <img src="./images/square-stack-3d-up-fill.svg" width="12" height="12"> `PlotInterpolations`
 <br/>&nbsp;&nbsp;&nbsp;&nbsp;<sub>
-*Digital signal processing using FIR and IIR Filters represented by digital transfer function, with bilinear transform and discrete Fourier transform.*</sub>
+* processing using FIR and IIR Filters represented by digital transfer function, with bilinear transform and discrete Fourier transform.*</sub>
 <br/>&nbsp;&nbsp;&nbsp;&nbsp;<sub>
 *Hermite cubic spline*</sub>

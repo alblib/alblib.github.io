@@ -36,6 +36,4 @@ depends on
 
 <img src="./images/square-stack-3d-up-fill.svg" width="12" height="12"> `PlotInterpolations`
 <br/>&nbsp;&nbsp;&nbsp;&nbsp;<sub>
-* processing using FIR and IIR Filters represented by digital transfer function, with bilinear transform and discrete Fourier transform.*</sub>
-<br/>&nbsp;&nbsp;&nbsp;&nbsp;<sub>
-*Hermite cubic spline*</sub>
+*Support various interpolation methods between plot points using Hermite cubic splines.</sub>

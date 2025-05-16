@@ -1,8 +1,5 @@
-from math import floor
 from typing import List, Tuple
 from tqdm import tqdm
-
-import numpy as np
 from ortools.linear_solver import pywraplp
 
 def first_n_primes(n: int) -> List[int]:
@@ -95,20 +92,26 @@ if __name__ == "__main__":
     with open('result.md', 'w', encoding='utf-8') as file:
         file.writelines([
             '|*n*|*Ratio*|*Σa<sub>i</sub> + Σb<sub>i</sub>*|\n',
-            '|---:|---:|---:|\n'
+            '|---|---|---|\n'
         ])
         for n in tqdm(range(1, N + 1)):
             u_sol, d_sol, cost = solve_primorial_ratio(n)
             primes = first_n_primes(n)
             M = primes[-1]
 
-            u_str = ""
-            for m in range(M, 1, -1):
-                u_str += ' '.join([f'{m}!' for _ in range(u_sol[m])])
+            u_str = ' '.join(
+                [
+                    ' '.join([f'{m}!' for _ in range(u_sol[m])])
+                    for m in range(M, 1, -1) if u_sol[m]
+                ]
+            )
 
-            d_str = ""
-            for m in range(M, 1, -1):
-                d_str += ' '.join([f'{m}!' for _ in range(d_sol[m])])
+            d_str = ' '.join(
+                [
+                    ' '.join([f'{m}!' for _ in range(d_sol[m])])
+                    for m in range(M, 1, -1) if d_sol[m]
+                ]
+            )
 
             r_str = ""
             if not d_str:
@@ -125,3 +128,4 @@ if __name__ == "__main__":
             ])
 
     print('result written in result.md')
+    

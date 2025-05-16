@@ -1,8 +1,5 @@
-from math import floor
 from typing import List, Tuple
 from tqdm import tqdm
-
-import numpy as np
 from ortools.linear_solver import pywraplp
 
 def first_n_primes(n: int) -> List[int]:

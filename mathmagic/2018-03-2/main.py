@@ -92,7 +92,7 @@ if __name__ == "__main__":
     with open('result.md', 'w', encoding='utf-8') as file:
         file.writelines([
             '|*n*|*Ratio*|*Σa<sub>i</sub> + Σb<sub>i</sub>*|\n',
-            '|---:|---:|---:|\n'
+            '|---|---|---|\n'
         ])
         for n in tqdm(range(1, N + 1)):
             u_sol, d_sol, cost = solve_primorial_ratio(n)

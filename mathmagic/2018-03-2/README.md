@@ -1,4 +1,8 @@
-## Breaking!!! ChatGPT solves the problem and dramatically improves algorithm
+## 2018-03-2
+
+I have to emphasize that I have checked all the answers by myself.
+
+### Breaking!!! ChatGPT solves the problem and dramatically improves algorithm
 
 [ChatGPT's Solution](https://chatgpt.com/share/682719b3-b424-800f-ab5a-8aceeb0ceb53)
 

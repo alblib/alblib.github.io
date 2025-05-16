@@ -1,5 +1,6 @@
 from math import floor
 from typing import List, Tuple
+from tqdm import tqdm
 
 import numpy as np
 from ortools.linear_solver import pywraplp
@@ -90,31 +91,37 @@ def solve_primorial_ratio(n: int) -> Tuple[List[int], List[int], int]:
 
 
 if __name__ == "__main__":
-    n = 10  # Change this to compute P_n for any n
-    while True:
-        n = int(input('n='))
-        if n <= 0:
-            break
-        u_sol, d_sol, cost = solve_primorial_ratio(n)
-        primes = first_n_primes(n)
-        M = primes[-1]
+    N = int(input('Max n : '))
+    with open('result.md', 'w', encoding='utf-8') as file:
+        file.writelines([
+            '|*n*|*Ratio*|*Σa<sub>i</sub> + Σb<sub>i</sub>*|\n',
+            '|---:|---:|---:|\n'
+        ])
+        for n in tqdm(range(1, N + 1)):
+            u_sol, d_sol, cost = solve_primorial_ratio(n)
+            primes = first_n_primes(n)
+            M = primes[-1]
 
-        print(f"Minimum total sum of arguments = {cost}")
-        # print("Numerator factorials:")
-        # for m in range(2, M + 1):
-        #     if u_sol[m] > 0:
-        #         print(f"  {m}!  × {u_sol[m]}")
-        # print("Denominator factorials:")
-        # for m in range(2, M + 1):
-        #     if d_sol[m] > 0:
-        #         print(f"  {m}!  × {d_sol[m]}")
+            u_str = ""
+            for m in range(M, 1, -1):
+                u_str += ' '.join([f'{m}!' for _ in range(u_sol[m])])
 
-        string = ""
-        for m in range(M, 1, -1):
-            for _ in range(u_sol[m]):
-                string += f'{m}! '
-        string += '/ '
-        for m in range(M, 1, -1):
-            for _ in range(d_sol[m]):
-                string += f'{m}! '
-        print(string)
+            d_str = ""
+            for m in range(M, 1, -1):
+                d_str += ' '.join([f'{m}!' for _ in range(d_sol[m])])
+
+            r_str = ""
+            if not d_str:
+                r_str = u_str
+            elif not u_str:
+                r_str = f'1 / {d_str}'
+            else:
+                r_str = f'{u_str} / {d_str}'
+
+            line = f'|**{n}**|{r_str}|{cost}|'
+            file.writelines([
+                line,
+                '\n'
+            ])
+
+    print('result written in result.md')

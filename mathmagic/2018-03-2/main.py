@@ -102,13 +102,19 @@ if __name__ == "__main__":
             primes = first_n_primes(n)
             M = primes[-1]
 
-            u_str = ""
-            for m in range(M, 1, -1):
-                u_str += ' '.join([f'{m}!' for _ in range(u_sol[m])])
+            u_str = ' '.join(
+                [
+                    ' '.join([f'{m}!' for _ in range(u_sol[m])])
+                    for m in range(M, 1, -1) if u_sol[m]
+                ]
+            )
 
-            d_str = ""
-            for m in range(M, 1, -1):
-                d_str += ' '.join([f'{m}!' for _ in range(d_sol[m])])
+            d_str = ' '.join(
+                [
+                    ' '.join([f'{m}!' for _ in range(d_sol[m])])
+                    for m in range(M, 1, -1) if d_sol[m]
+                ]
+            )
 
             r_str = ""
             if not d_str:
@@ -125,3 +131,4 @@ if __name__ == "__main__":
             ])
 
     print('result written in result.md')
+    

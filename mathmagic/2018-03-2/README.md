@@ -10,4 +10,5 @@ ChatGPT-o4-mini-high solved the problem #2 of March 2018 Math magic and improves
 Also, I corrected human errors.
 
 [Download Code](main.py)
+
 [Result upto n=200](result.md)

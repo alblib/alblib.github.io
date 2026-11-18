@@ -11,6 +11,16 @@
     + [Solutions](mathmagic) to [Math magic](https://erich-friedman.github.io/mathmagic/) by [Erich Friedman](https://erich-friedman.github.io/)
 - Algorithm Competitions
 
+- Math
+  - Shapes
+    - [Squircle](math/shapes/squircle.md)
+  - Audio
+- Physics
+  - Total Textbook
+  - Total Problem set
+  - 
+
+
 ## Old Page
 [https://hamilton.sf.net](https://hamilton.sf.net)
 
